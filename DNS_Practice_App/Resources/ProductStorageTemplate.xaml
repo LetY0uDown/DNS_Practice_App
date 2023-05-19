@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:model="clr-namespace:DNS_Practice_App.Models"
+                    xmlns:converter="clr-namespace:DNS_Practice_App.Resources.Converters">
+
+    <converter:RecordKindConverter x:Key="RecordKind" />
+
+    <DataTemplate DataType="{x:Type model:ProductStorage}" x:Key="ProductStorage">
+        <Grid Margin="0 10 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".35*"/>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Остаток"
+                           Foreground="{DynamicResource MaterialDesignLightForeground}"
+                           HorizontalAlignment="Center"
+                           FontSize="16"/>
+
+                <TextBlock Foreground="{DynamicResource MaterialDesignLightForeground}"
+                           Text="{Binding ProductCount}" FontSize="44"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="{Binding Path=Document.Name, StringFormat=Документ: {0}}"
+                           FontSize="14"/>
+
+                <TextBlock Text="{Binding Path=Document.Type, StringFormat=Тип документа: {0}}"
+                           FontSize="14"/>
+                
+                <TextBlock Text="{Binding Path=RecordKind, Converter={StaticResource RecordKind}, StringFormat=Тип движения: {0}}"
+                           FontSize="14"/>
+            </StackPanel>
+
+            <TextBlock Text="{Binding Path=Product.Name, StringFormat=Продукт: {0}}"
+                       FontSize="14" Grid.Column="2"/>
+
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>
