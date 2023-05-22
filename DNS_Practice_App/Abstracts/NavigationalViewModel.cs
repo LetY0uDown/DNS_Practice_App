@@ -1,15 +1,16 @@
-﻿using System.Windows.Controls;
-
-namespace DNS_Practice_App.Core.Base;
+﻿namespace DNS_Practice_App.Abstracts;
 
 public abstract class NavigationalViewModel : ViewModel
 {
-    private Page _currentPage;
+    private IPage<ViewModel> _currentPage = null!;
 
-    public Page CurrentPage {
+    public virtual IPage<ViewModel> CurrentPage
+    {
         get => _currentPage;
         set {
             _currentPage = value;
+            _currentPage.Display();
+
             OnPropertyChanged();
         }
     }

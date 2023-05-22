@@ -1,43 +1,37 @@
-﻿using DNS_Practice_App.Core.Base;
-using DNS_Practice_App.Views.Pages;
-using System.Threading.Tasks;
+﻿using DNS_Practice_App.Abstracts;
 
 namespace DNS_Practice_App.Core.ViewModels;
 
 public class AppNavigationViewModel : NavigationalViewModel
 {
-    public AppNavigationViewModel ()
-    {
-        // костыль
-        Task.Run(async () => {
-            await Task.Delay(1000);
+    private readonly INavigation _navigation;
 
-            Navigation.NavigationModel = this;
-            App.Current.Dispatcher.Invoke(Navigation.DisplayPage<ProductsReservesPage>);
-        });
+    public AppNavigationViewModel (INavigation navigation)
+    {
+        _navigation = navigation;
 
         DisplayReservesCommand = new(o => {
-            Navigation.DisplayPage<ProductsReservesPage>();
+            _navigation.DisplayPage<IPage<ProductsReservesViewModel>>();
         });
 
         DisplayProductsOnStoragesCommand = new(o => {
-            Navigation.DisplayPage<ProductStoragePage>();
+            _navigation.DisplayPage<IPage<ProductsStorageViewModel>>();
         });
 
         DisplayProductsCommand = new(o => {
-            Navigation.DisplayPage<ProductsPage>();
+            _navigation.DisplayPage<IPage<ProductsViewModel>>();
         });
 
         DisplayDocumentsCommand = new(o => {
-            Navigation.DisplayPage<DocumentsPage>();
+            _navigation.DisplayPage<IPage<DocumentsViewModel>>();
         });
 
         DisplayCitiesCommand = new(o => {
-            Navigation.DisplayPage<CitiesPage>();
+            _navigation.DisplayPage<IPage<CitiesViewModel>>();
         });
 
         DisplayStoragesCommand = new(o => {
-            Navigation.DisplayPage<StoragesPage>();
+            _navigation.DisplayPage<IPage<StoragesViewModel>>();
         });
     }
 
@@ -47,4 +41,10 @@ public class AppNavigationViewModel : NavigationalViewModel
     public UICommand DisplayDocumentsCommand { get; private init; }
     public UICommand DisplayCitiesCommand { get; private init; }
     public UICommand DisplayStoragesCommand { get; private init; }
+
+    public override void Initialize ()
+    {
+        _navigation.NavigationalModel = this;
+        _navigation.DisplayPage<IPage<LoginPageViewModel>>();
+    }
 }

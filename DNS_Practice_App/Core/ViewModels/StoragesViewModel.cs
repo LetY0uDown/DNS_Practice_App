@@ -1,4 +1,4 @@
-﻿using DNS_Practice_App.Core.Base;
+﻿using DNS_Practice_App.Abstracts;
 using DNS_Practice_App.Models;
 using System.Collections.Generic;
 using System.Linq;

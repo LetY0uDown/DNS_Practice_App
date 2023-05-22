@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:vm="clr-namespace:DNS_Practice_App.Core.ViewModels"
+      xmlns:icon="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
       xmlns:local="clr-namespace:DNS_Practice_App"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -26,6 +27,13 @@
         <TextBlock Grid.ColumnSpan="2" Text="Резервы товаров"
                    HorizontalAlignment="Center" VerticalAlignment="Center"
                    FontSize="24"/>
+
+        <Button Grid.Column="1" Command="{Binding UpdateList}"
+                Grid.RowSpan="2" VerticalAlignment="Bottom"
+                HorizontalAlignment="Right" Margin="0 0 15 0"
+                Style="{DynamicResource MaterialDesignFloatingActionMiniButton}">
+            <icon:MaterialIcon Kind="Reload" />
+        </Button>
 
         <!-- Search -->
         <Grid Grid.Row="1">

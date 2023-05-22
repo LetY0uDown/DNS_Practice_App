@@ -1,14 +1,24 @@
-﻿using DNS_Practice_App.Core.ViewModels;
+﻿using DNS_Practice_App.Abstracts;
+using DNS_Practice_App.Core.ViewModels;
 using System.Windows.Controls;
 
 namespace DNS_Practice_App.Views.Pages;
 
-public partial class LoginPage : Page
+public partial class LoginPage : Page, IPage<LoginPageViewModel>
 {
-    public LoginPage ()
+    public LoginPage (LoginPageViewModel viewModel)
     {
-        InitializeComponent();
+        ViewModel = viewModel;
+    }
 
-        DataContext = new LoginPageViewModel();
+    public LoginPageViewModel ViewModel { get; private init; }
+
+    public void Display ()
+    {
+        DataContext = ViewModel;
+
+        ViewModel.Initialize();
+
+        InitializeComponent();
     }
 }

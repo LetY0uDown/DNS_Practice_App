@@ -1,12 +1,12 @@
-﻿using DNS_Practice_App.Core.Base;
+﻿using DNS_Practice_App.Abstracts;
 using DNS_Practice_App.Models;
-using DNS_Practice_App.Views.Pages;
+using System;
 
 namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class LoginPageViewModel : ViewModel
 {
-    public LoginPageViewModel ()
+    public LoginPageViewModel (INavigation navigation)
     {
         LoginCommand = new(o => {
             App.FirstConnection = FirstConnectionData;
@@ -48,8 +48,10 @@ public sealed class LoginPageViewModel : ViewModel
                 OnPropertyChanged(nameof(DangerText_2));
             }
 
-            if (canConnect)
-                Navigation.DisplayPage<AppNavigationPage>();
+            if (!canConnect)
+                return;
+
+            navigation.DisplayPage<IPage<ProductsStorageViewModel>>();
 
         }, b => FirstConnectionData.IsNotEmpty && SecondConnectionData.IsNotEmpty);
     }

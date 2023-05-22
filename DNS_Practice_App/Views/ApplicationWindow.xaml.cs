@@ -5,10 +5,18 @@ namespace DNS_Practice_App.Views;
 
 public partial class ApplicationWindow : Window
 {
-    public ApplicationWindow ()
+    public ApplicationWindow (AppNavigationViewModel viewModel)
     {
-        InitializeComponent();
+        DataContext = viewModel;
 
-        DataContext = new LoginNavigationViewModel();
+        viewModel.Initialize();
+
+        InitializeComponent();
+    }
+
+    private void Frame_ContentRendered (object sender, System.EventArgs e)
+    {
+        if (App.FirstConnection is not null)
+            navigationPanel.Visibility = Visibility.Visible;
     }
 }

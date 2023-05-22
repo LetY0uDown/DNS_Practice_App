@@ -8,5 +8,42 @@
         MinHeight="650" MinWidth="1250"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource MaterialDesignLightBackground}">
-    <Frame NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"/>
+
+    <Window.Resources>
+        <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignTabRadioButtonTop}">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".1*"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <UniformGrid Columns="6" x:Name="navigationPanel" Visibility="Collapsed">
+            <RadioButton Content="Товары"
+                         Command="{Binding DisplayProductsCommand}"/>
+
+            <RadioButton Content="Документы" Grid.Column="1"
+                         Command="{Binding DisplayDocumentsCommand}"/>
+
+            <RadioButton Content="Доступные города" Grid.Column="2"
+                         Command="{Binding DisplayCitiesCommand}"/>
+
+            <RadioButton Content="Склады в городах" Grid.Column="3"
+                         Command="{Binding DisplayStoragesCommand}"/>
+
+            <RadioButton Content="Резервы товаров" Grid.Column="4"
+                         Command="{Binding DisplayReservesCommand}"/>
+
+            <RadioButton Content="Движание по складам" Grid.Column="5"
+                         IsChecked="True"
+                         Command="{Binding DisplayProductsOnStoragesCommand}"/>
+        </UniformGrid>
+
+        <Frame NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"
+               Grid.Row="1" ContentRendered="Frame_ContentRendered"/>
+    </Grid>
+    
 </Window>

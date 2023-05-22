@@ -1,44 +1,16 @@
-﻿using DNS_Practice_App.Core.Base;
-using System;
-using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using DNS_Practice_App.Abstracts;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DNS_Practice_App.Core;
 
-internal static class Navigation
+internal class Navigation : INavigation
 {
-    private static readonly List<Page> _pages = new();
-    private static int _pageIndex = 0;
+    public NavigationalViewModel NavigationalModel { get; set; } = null!;
 
-    public static NavigationalViewModel NavigationModel { get; set; } = null!;
-
-    public static void DisplayPage<T> () where T : Page
+    public void DisplayPage<T> () where T : IPage<ViewModel>
     {
-        var page = Activator.CreateInstance<T>();
+        var page = App.Host.Services.GetRequiredService<T> ();
 
-        if (_pageIndex < _pages.Count - 1) {
-            _pages.RemoveRange(_pageIndex + 1, _pages.Count - _pageIndex - 1);
-        }
-
-        _pages.Add(page);
-        _pageIndex = _pages.Count - 1;
-
-        NavigationModel.CurrentPage = _pages[_pageIndex];
-    }
-
-    public static void DisplayNext ()
-    {
-        if (_pageIndex >= _pages.Count - 1)
-            return;
-
-        NavigationModel.CurrentPage = _pages[++_pageIndex];
-    }
-
-    public static void DisplayPrevious ()
-    {
-        if (_pageIndex <= 0)
-            return;
-
-        NavigationModel.CurrentPage = _pages[--_pageIndex];
+        NavigationalModel.CurrentPage = page;
     }
 }

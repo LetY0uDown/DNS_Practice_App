@@ -1,4 +1,4 @@
-﻿using DNS_Practice_App.Core.Base;
+﻿using DNS_Practice_App.Abstracts;
 using DNS_Practice_App.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +7,20 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class ProductsViewModel : ViewModel
 {
+    private IEnumerable<Product> _prods1Orig;
+    private IEnumerable<Product> _prods2Orig;
+
+    private readonly IRepository<Product> _repository;
     private string _searchString;
 
-    public ProductsViewModel ()
+    public ProductsViewModel (IRepository<Product> repository)
     {
-        using (var context = new DNS_practiceContext_One()) {
-            Products_1 = context.Products.ToList();
+        _repository = repository;
 
-            using (var context2 = new DNS_practiceContext_Two()) {
-                Products_2 = context2.Products.ToList();
-            }
-        }
+        UpdateList = new(o => {
+            Initialize();
+            UpdateUI();
+        });
     }
 
     public string SearchText
@@ -25,28 +28,43 @@ public sealed class ProductsViewModel : ViewModel
         get => _searchString;
         set {
             _searchString = value;
-
-            if (string.IsNullOrEmpty(value)) {
-                using (var context = new DNS_practiceContext_One()) {
-                    Products_1 = context.Products.ToList();
-
-                    using (var context2 = new DNS_practiceContext_Two()) {
-                        Products_2 = context2.Products.ToList();
-                    }
-                }
-            }
-
-            Products_1 = Products_1.Where(e => e.Name.ToLower().Contains(value.ToLower()) || e.Id.ToString().Contains(value)).ToList();
-            Products_2 = Products_2.Where(e => e.Name.ToLower().Contains(value.ToLower()) || e.Id.ToString().Contains(value)).ToList();
-
-            OnPropertyChanged(nameof(Products_1));
-            OnPropertyChanged(nameof(Products_2));
+            Search();           
         }
     }
+
+    public UICommand UpdateList { get; private init; }
 
     public List<Product> Products_1 { get; set; }
     public List<Product> Products_2 { get; set; }
 
     public string FirstDB => App.FirstConnection.Database;
     public string SecondDB => App.SecondConnection.Database;
+
+    public override void Initialize ()
+    {
+        _prods1Orig = _repository.GetFromFirstDB();
+        _prods2Orig = _repository.GetFromSecondDB();
+
+        Products_1 = _prods1Orig.ToList();
+        Products_2= _prods2Orig.ToList();
+    }
+
+    private void Search ()
+    {
+        if (string.IsNullOrEmpty(SearchText)) {
+            Products_1 = _prods1Orig.ToList ();
+            Products_2 = _prods2Orig.ToList ();
+        } else {
+            Products_1 = _prods1Orig.Where(e => e.Name.ToLower().Contains(SearchText.ToLower()) || e.Id.ToString().Contains(SearchText)).ToList();
+            Products_2 = _prods2Orig.Where(e => e.Name.ToLower().Contains(SearchText.ToLower()) || e.Id.ToString().Contains(SearchText)).ToList();
+        }
+
+        UpdateUI();
+    }
+
+    private void UpdateUI ()
+    {
+        OnPropertyChanged(nameof(Products_1));
+        OnPropertyChanged(nameof(Products_2));
+    }
 }
