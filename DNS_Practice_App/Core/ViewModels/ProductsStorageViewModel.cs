@@ -60,19 +60,8 @@ public sealed class ProductsStorageViewModel : ViewModel
             return;
         }
 
-        Products_FirstDB = _list1Orig.Where(entity =>
-                entity.DocumentId.ToString().Contains(SearchText) ||
-                entity.ProductId.ToString().Contains(SearchText) ||
-                entity.Product.Name.ToLower().Contains(SearchText.ToLower()) ||
-                entity.Document.Name.ToLower().Contains(SearchText.ToLower()))
-            .ToList();
-
-        Products_SecondDB = _list2Orig.Where(entity =>
-                entity.DocumentId.ToString().Contains(SearchText) ||
-                entity.ProductId.ToString().Contains(SearchText) ||
-                entity.Product.Name.ToLower().Contains(SearchText.ToLower()) ||
-                entity.Document.Name.ToLower().Contains(SearchText.ToLower()))
-            .ToList();
+        Products_FirstDB = _repository.SearchFrom(_list1Orig, SearchText).ToList();
+        Products_SecondDB = _repository.SearchFrom(_list2Orig, SearchText).ToList();
 
         UpdateUI();
     }

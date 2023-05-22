@@ -7,17 +7,20 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class StoragesViewModel : ViewModel
 {
+    private IEnumerable<Storage> _storages1Orig;
+    private IEnumerable<Storage> _storages2Orig;
+
+    private readonly IRepository<Storage> _repository;
     private string _searchString;
 
-    public StoragesViewModel ()
+    public StoragesViewModel (IRepository<Storage> repository)
     {
-        using (var context = new DNS_practiceContext_One()) {
-            Storages_1 = context.Storages.ToList();
+        _repository = repository;
 
-            using (var context2 = new DNS_practiceContext_Two()) {
-                Storages_2 = context2.Storages.ToList();
-            }
-        }
+        UpdateList = new(o => {
+            Initialize();
+            UpdateUI();
+        });
     }
 
     public string SearchText
@@ -25,28 +28,41 @@ public sealed class StoragesViewModel : ViewModel
         get => _searchString;
         set {
             _searchString = value;
-
-            if (string.IsNullOrEmpty(value)) {
-                using (var context = new DNS_practiceContext_One()) {
-                    Storages_1 = context.Storages.ToList();
-
-                    using (var context2 = new DNS_practiceContext_Two()) {
-                        Storages_2 = context2.Storages.ToList();
-                    }
-                }
-            }
-
-            Storages_1 = Storages_1.Where(e => e.Name.ToLower().Contains(value.ToLower()) || e.City.Name.ToLower().Contains(value.ToLower())).ToList();
-            Storages_2 = Storages_2.Where(e => e.Name.ToLower().Contains(value.ToLower()) || e.City.Name.ToLower().Contains(value.ToLower())).ToList();
-
-            OnPropertyChanged(nameof(Storages_1));
-            OnPropertyChanged(nameof(Storages_2));
+            Search();
         }
     }
+
+    public UICommand UpdateList { get; private init; }
 
     public List<Storage> Storages_1 { get; set; }
     public List<Storage> Storages_2 { get; set; }
 
     public string FirstDB => App.FirstConnection.Database;
     public string SecondDB => App.SecondConnection.Database;
+
+    public override void Initialize ()
+    {
+        _storages1Orig = _repository.GetFromFirstDB();
+        _storages2Orig = _repository.GetFromSecondDB();
+
+        Storages_1 = _storages1Orig.ToList();
+        Storages_2 = _storages2Orig.ToList();
+    }
+
+    private void Search ()
+    {
+        if (string.IsNullOrEmpty(SearchText)) {
+            Storages_1 = _storages1Orig.ToList();
+            Storages_2 = _storages2Orig.ToList();
+        }
+
+        Storages_1 = _repository.SearchFrom(_storages1Orig, SearchText).ToList();
+        Storages_2 = _repository.SearchFrom(_storages2Orig, SearchText).ToList();
+    }
+
+    private void UpdateUI ()
+    {
+        OnPropertyChanged(nameof(Storages_1));
+        OnPropertyChanged(nameof(Storages_2));
+    }
 }

@@ -55,8 +55,8 @@ public sealed class ProductsViewModel : ViewModel
             Products_1 = _prods1Orig.ToList ();
             Products_2 = _prods2Orig.ToList ();
         } else {
-            Products_1 = _prods1Orig.Where(e => e.Name.ToLower().Contains(SearchText.ToLower()) || e.Id.ToString().Contains(SearchText)).ToList();
-            Products_2 = _prods2Orig.Where(e => e.Name.ToLower().Contains(SearchText.ToLower()) || e.Id.ToString().Contains(SearchText)).ToList();
+            Products_1 = _repository.SearchFrom(_prods1Orig, SearchText).ToList();
+            Products_2 = _repository.SearchFrom(_prods2Orig, SearchText).ToList();
         }
 
         UpdateUI();

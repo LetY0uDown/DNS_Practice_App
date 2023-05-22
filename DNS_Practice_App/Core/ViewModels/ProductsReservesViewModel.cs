@@ -60,19 +60,8 @@ public sealed class ProductsReservesViewModel : ViewModel
             return;
         }
 
-        Products_FirstDB = Products_FirstDB.Where(entity =>
-                entity.DocumentId.ToString().Contains(SearchText) ||
-                entity.ProductId.ToString().Contains(SearchText) ||
-                entity.Product.Name.ToLower().Contains(SearchText.ToLower()) ||
-                entity.Document.Name.ToLower().Contains(SearchText.ToLower()))
-            .ToList();
-
-        Products_SecondDB = Products_SecondDB.Where(entity =>
-                entity.DocumentId.ToString().Contains(SearchText) ||
-                entity.ProductId.ToString().Contains(SearchText) ||
-                entity.Product.Name.ToLower().Contains(SearchText.ToLower()) ||
-                entity.Document.Name.ToLower().Contains(SearchText.ToLower()))
-            .ToList();
+        Products_FirstDB = _repository.SearchFrom(_prods1Orig, SearchText).ToList();
+        Products_SecondDB = _repository.SearchFrom(_prods2Orig, SearchText).ToList();
 
         UpdateUI();
     }

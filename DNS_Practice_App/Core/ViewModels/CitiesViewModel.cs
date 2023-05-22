@@ -55,8 +55,8 @@ public sealed class CitiesViewModel : ViewModel
             Cities_1 = _cities1Orig.ToList();
             Cities_2 = _cities2Orig.ToList();
         } else {
-            Cities_1 = _cities1Orig.Where(city => city.Name.ToLower().Contains(SearchText.ToLower())).ToList();
-            Cities_2 = _cities2Orig.Where(city => city.Name.ToLower().Contains(SearchText.ToLower())).ToList();
+            Cities_1 = _repository.SearchFrom(_cities1Orig, SearchText).ToList();
+            Cities_2 = _repository.SearchFrom(_cities2Orig, SearchText).ToList();
         }
 
         UpdateUI();

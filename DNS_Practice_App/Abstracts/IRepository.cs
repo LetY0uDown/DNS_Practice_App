@@ -7,4 +7,6 @@ public interface IRepository<T> where T : class
     IEnumerable<T> GetFromFirstDB ();
 
     IEnumerable<T> GetFromSecondDB ();
+
+    IEnumerable<T> SearchFrom(IEnumerable<T> source, string query);
 }

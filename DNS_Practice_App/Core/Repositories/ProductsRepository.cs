@@ -20,4 +20,9 @@ internal class ProductsRepository : IRepository<Product>
 
         return context.Products.ToList();
     }
+
+    public IEnumerable<Product> SearchFrom (IEnumerable<Product> source, string query)
+    {
+        return source.Where(e => e.Name.ToLower().Contains(query.ToLower()) || e.Id.ToString().Contains(query));
+    }
 }

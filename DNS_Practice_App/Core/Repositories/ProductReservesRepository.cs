@@ -21,4 +21,13 @@ internal class ProductReservesRepository : IRepository<ProductReserve>
 
         return context.ProductReserves.Include(e => e.Product).Include(e => e.Document).OrderBy(p => p.Product.Name).ToList();
     }
+
+    public IEnumerable<ProductReserve> SearchFrom (IEnumerable<ProductReserve> source, string query)
+    {
+        return source.Where(entity =>
+                entity.DocumentId.ToString().Contains(query) ||
+                entity.ProductId.ToString().Contains(query) ||
+                entity.Product.Name.ToLower().Contains(query.ToLower()) ||
+                entity.Document.Name.ToLower().Contains(query.ToLower()));
+    }
 }

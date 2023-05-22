@@ -20,4 +20,9 @@ internal class CitiesRepository : IRepository<City>
 
         return context.Cities.ToList();
     }
+
+    public IEnumerable<City> SearchFrom (IEnumerable<City> source, string query)
+    {
+        return source.Where(city => city.Name.ToLower().Contains(query.ToLower()));
+    }
 }

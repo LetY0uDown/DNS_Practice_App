@@ -36,7 +36,7 @@ public sealed class DocumentsViewModel : ViewModel
 
     public List<Document> Documents_1 { get; set; }
     public List<Document> Documents_2 { get; set; }
-
+    
     public string FirstDB => App.FirstConnection.Database;
     public string SecondDB => App.SecondConnection.Database;
 
@@ -55,8 +55,8 @@ public sealed class DocumentsViewModel : ViewModel
             Documents_1 = _docs1Orig.ToList();
             Documents_2 = _docs2Orig.ToList();
         } else {
-            Documents_1 = _docs1Orig.Where(e => e.Name.ToLower().Contains(SearchText.ToLower())).ToList();
-            Documents_2 = _docs2Orig.Where(e => e.Name.ToLower().Contains(SearchText.ToLower())).ToList();
+            Documents_1 = _repository.SearchFrom(_docs1Orig, SearchText).ToList();
+            Documents_2 = _repository.SearchFrom(_docs2Orig, SearchText).ToList();
         }
 
         UpdateUI();

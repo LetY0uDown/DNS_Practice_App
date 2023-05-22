@@ -20,4 +20,9 @@ internal class StorageRepository : IRepository<Storage>
 
         return context.Storages.ToList();
     }
+
+    public IEnumerable<Storage> SearchFrom (IEnumerable<Storage> source, string query)
+    {
+        return source.Where(e => e.Name.ToLower().Contains(query.ToLower()) || e.City.Name.ToLower().Contains(query.ToLower()));
+    }
 }
