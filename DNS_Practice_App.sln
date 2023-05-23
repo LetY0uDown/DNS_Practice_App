@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNS_Practice_App", "DNS_Practice_App\DNS_Practice_App.csproj", "{95509B72-3CBF-41A2-869D-807BF0B182F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DNS_Practice_App", "DNS_Practice_App\DNS_Practice_App.csproj", "{95509B72-3CBF-41A2-869D-807BF0B182F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{45F5063F-658F-4378-8C06-5D5F2B5AE33A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{95509B72-3CBF-41A2-869D-807BF0B182F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95509B72-3CBF-41A2-869D-807BF0B182F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95509B72-3CBF-41A2-869D-807BF0B182F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45F5063F-658F-4378-8C06-5D5F2B5AE33A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45F5063F-658F-4378-8C06-5D5F2B5AE33A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45F5063F-658F-4378-8C06-5D5F2B5AE33A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45F5063F-658F-4378-8C06-5D5F2B5AE33A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

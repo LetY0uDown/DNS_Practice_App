@@ -21,7 +21,10 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <UniformGrid Columns="6" x:Name="navigationPanel" Visibility="Collapsed">
+        <UniformGrid Columns="7" x:Name="navigationPanel" Visibility="Visible">
+            <RadioButton Content="Базы данных"
+                         Command="{Binding DisplayDatabasesCommand}"/>
+
             <RadioButton Content="Товары"
                          Command="{Binding DisplayProductsCommand}"/>
 
@@ -43,7 +46,7 @@
         </UniformGrid>
 
         <Frame NavigationUIVisibility="Hidden" Content="{Binding CurrentPage}"
-               Grid.Row="1" ContentRendered="Frame_ContentRendered"/>
+               Grid.Row="1"/>
     </Grid>
     
 </Window>

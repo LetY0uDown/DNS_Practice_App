@@ -1,5 +1,6 @@
-﻿using DNS_Practice_App.Abstracts;
-using DNS_Practice_App.Models;
+﻿using Database;
+using Database.Models;
+using DNS_Practice_App.Abstracts;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,8 +8,7 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class ProductsStorageViewModel : ViewModel
 {
-    private IEnumerable<ProductStorage> _list1Orig;
-    private IEnumerable<ProductStorage> _list2Orig;
+    private List<IEnumerable<ProductStorage>> _listOrig;
 
     private readonly IRepository<ProductStorage> _repository;
     private string _searchText;
@@ -34,41 +34,31 @@ public sealed class ProductsStorageViewModel : ViewModel
 
     public UICommand UpdateList { get; private init; }
 
-    public List<ProductStorage> Products_FirstDB { get; set; }
-    public List<ProductStorage> Products_SecondDB { get; set; }
-
-    public string FirstDB => App.FirstConnection.Database;
-    public string SecondDB => App.SecondConnection.Database;
+    public List<IEnumerable<ProductStorage>> Products { get; set; }
 
     public override void Initialize ()
     {
-        _list1Orig = _repository.GetFromFirstDB();
-        _list2Orig = _repository.GetFromSecondDB();
-
-        Products_FirstDB = _list1Orig.ToList();
-        Products_SecondDB = _list2Orig.ToList();
+        _listOrig = _repository.GetData().ToList();
+        Products = _listOrig;
     }
 
     private void Search ()
     {
         if (string.IsNullOrWhiteSpace(SearchText)) {
-            Products_FirstDB = _list1Orig.ToList();
-            Products_SecondDB = _list2Orig.ToList();
-
+            Products = _listOrig;
             UpdateUI();
-
             return;
         }
 
-        Products_FirstDB = _repository.SearchFrom(_list1Orig, SearchText).ToList();
-        Products_SecondDB = _repository.SearchFrom(_list2Orig, SearchText).ToList();
+        for (int i = 0; i < Products.Count; i++) {
+            Products[i] = _repository.FilterList(_listOrig[i], SearchText);
+        }
 
         UpdateUI();
     }
 
     private void UpdateUI ()
     {
-        OnPropertyChanged(nameof(Products_FirstDB));
-        OnPropertyChanged(nameof(Products_SecondDB));
+        OnPropertyChanged(nameof(Products));
     }
 }

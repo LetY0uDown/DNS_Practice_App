@@ -1,5 +1,6 @@
-﻿using DNS_Practice_App.Abstracts;
-using DNS_Practice_App.Models;
+﻿using Database;
+using Database.Models;
+using DNS_Practice_App.Abstracts;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,8 +8,7 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class DocumentsViewModel : ViewModel
 {
-    private IEnumerable<Document> _docs1Orig;
-    private IEnumerable<Document> _docs2Orig;
+    private List<IEnumerable<Document>> _docsOrig;
 
     private readonly IRepository<Document> _repository;
     private string _searchString;
@@ -34,29 +34,22 @@ public sealed class DocumentsViewModel : ViewModel
 
     public UICommand UpdateList { get; private init; }
 
-    public List<Document> Documents_1 { get; set; }
-    public List<Document> Documents_2 { get; set; }
-    
-    public string FirstDB => App.FirstConnection.Database;
-    public string SecondDB => App.SecondConnection.Database;
+    public List<IEnumerable<Document>> Documents { get; set; }
 
     public override void Initialize ()
     {
-        _docs1Orig = _repository.GetFromFirstDB();
-        _docs2Orig = _repository.GetFromSecondDB();
-
-        Documents_1 = _docs1Orig.ToList();
-        Documents_2 = _docs2Orig.ToList();
+        _docsOrig = _repository.GetData().ToList();
+        Documents = _docsOrig;
     }
 
     private void Search ()
     {
         if (string.IsNullOrWhiteSpace(SearchText)) {
-            Documents_1 = _docs1Orig.ToList();
-            Documents_2 = _docs2Orig.ToList();
+            Documents = _docsOrig.ToList();
         } else {
-            Documents_1 = _repository.SearchFrom(_docs1Orig, SearchText).ToList();
-            Documents_2 = _repository.SearchFrom(_docs2Orig, SearchText).ToList();
+            for (int i = 0; i < _docsOrig.Count; i++) {
+                Documents[i] = _repository.FilterList(_docsOrig[i], SearchText);
+            }
         }
 
         UpdateUI();
@@ -64,7 +57,6 @@ public sealed class DocumentsViewModel : ViewModel
 
     private void UpdateUI ()
     {
-        OnPropertyChanged(nameof(Documents_1));
-        OnPropertyChanged(nameof(Documents_2));
+        OnPropertyChanged(nameof(Documents));
     }
 }

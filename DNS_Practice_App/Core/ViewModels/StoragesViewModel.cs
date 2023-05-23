@@ -1,5 +1,6 @@
-﻿using DNS_Practice_App.Abstracts;
-using DNS_Practice_App.Models;
+﻿using Database;
+using Database.Models;
+using DNS_Practice_App.Abstracts;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,9 +8,7 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class StoragesViewModel : ViewModel
 {
-    private IEnumerable<Storage> _storages1Orig;
-    private IEnumerable<Storage> _storages2Orig;
-
+    private List<IEnumerable<Storage>> _storagesOrig;
     private readonly IRepository<Storage> _repository;
     private string _searchString;
 
@@ -34,35 +33,31 @@ public sealed class StoragesViewModel : ViewModel
 
     public UICommand UpdateList { get; private init; }
 
-    public List<Storage> Storages_1 { get; set; }
-    public List<Storage> Storages_2 { get; set; }
-
-    public string FirstDB => App.FirstConnection.Database;
-    public string SecondDB => App.SecondConnection.Database;
+    public List<IEnumerable<Storage>> Storages { get; set; }
 
     public override void Initialize ()
     {
-        _storages1Orig = _repository.GetFromFirstDB();
-        _storages2Orig = _repository.GetFromSecondDB();
-
-        Storages_1 = _storages1Orig.ToList();
-        Storages_2 = _storages2Orig.ToList();
+        _storagesOrig = _repository.GetData().ToList();
+        Storages = _storagesOrig;
     }
 
     private void Search ()
     {
         if (string.IsNullOrEmpty(SearchText)) {
-            Storages_1 = _storages1Orig.ToList();
-            Storages_2 = _storages2Orig.ToList();
+            Storages = _storagesOrig;
+            UpdateUI();
+            return;
         }
 
-        Storages_1 = _repository.SearchFrom(_storages1Orig, SearchText).ToList();
-        Storages_2 = _repository.SearchFrom(_storages2Orig, SearchText).ToList();
+        for (int i = 0; i < Storages.Count; i++) {
+            Storages[i] = _repository.FilterList(_storagesOrig[i], SearchText);
+        }
+
+        UpdateUI();
     }
 
     private void UpdateUI ()
     {
-        OnPropertyChanged(nameof(Storages_1));
-        OnPropertyChanged(nameof(Storages_2));
+        OnPropertyChanged(nameof(Storages));
     }
 }

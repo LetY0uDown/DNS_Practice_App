@@ -1,5 +1,6 @@
-﻿using DNS_Practice_App.Abstracts;
-using DNS_Practice_App.Models;
+﻿using Database;
+using Database.Models;
+using DNS_Practice_App.Abstracts;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,8 +8,7 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class ProductsViewModel : ViewModel
 {
-    private IEnumerable<Product> _prods1Orig;
-    private IEnumerable<Product> _prods2Orig;
+    private List<IEnumerable<Product>> _prodsOrig;
 
     private readonly IRepository<Product> _repository;
     private string _searchString;
@@ -34,29 +34,22 @@ public sealed class ProductsViewModel : ViewModel
 
     public UICommand UpdateList { get; private init; }
 
-    public List<Product> Products_1 { get; set; }
-    public List<Product> Products_2 { get; set; }
-
-    public string FirstDB => App.FirstConnection.Database;
-    public string SecondDB => App.SecondConnection.Database;
+    public List<IEnumerable<Product>> Products { get; set; }
 
     public override void Initialize ()
     {
-        _prods1Orig = _repository.GetFromFirstDB();
-        _prods2Orig = _repository.GetFromSecondDB();
-
-        Products_1 = _prods1Orig.ToList();
-        Products_2= _prods2Orig.ToList();
+        _prodsOrig = _repository.GetData().ToList();
+        Products = _prodsOrig.ToList();
     }
 
     private void Search ()
     {
         if (string.IsNullOrEmpty(SearchText)) {
-            Products_1 = _prods1Orig.ToList ();
-            Products_2 = _prods2Orig.ToList ();
+            Products = _prodsOrig.ToList();
         } else {
-            Products_1 = _repository.SearchFrom(_prods1Orig, SearchText).ToList();
-            Products_2 = _repository.SearchFrom(_prods2Orig, SearchText).ToList();
+            for (int i = 0; i < _prodsOrig.Count; i++) {
+                Products[i] = _repository.FilterList(_prodsOrig[i], SearchText);
+            }
         }
 
         UpdateUI();
@@ -64,7 +57,6 @@ public sealed class ProductsViewModel : ViewModel
 
     private void UpdateUI ()
     {
-        OnPropertyChanged(nameof(Products_1));
-        OnPropertyChanged(nameof(Products_2));
+        OnPropertyChanged(nameof(Products));
     }
 }

@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:model="clr-namespace:DNS_Practice_App.Models">
+                    xmlns:model="clr-namespace:Database.Models;assembly=Database">
     <DataTemplate DataType="{x:Type model:Product}" x:Key="Product">
         <Grid Margin="0 25 0 0">
             <StackPanel>

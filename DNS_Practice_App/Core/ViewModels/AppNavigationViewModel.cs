@@ -35,6 +35,7 @@ public class AppNavigationViewModel : NavigationalViewModel
         });
     }
 
+    public UICommand DisplayDatabasesCommand { get; private init; }
     public UICommand DisplayReservesCommand { get; private init; }
     public UICommand DisplayProductsOnStoragesCommand { get; private init; }
     public UICommand DisplayProductsCommand { get; private init; }
@@ -45,6 +46,6 @@ public class AppNavigationViewModel : NavigationalViewModel
     public override void Initialize ()
     {
         _navigation.NavigationalModel = this;
-        _navigation.DisplayPage<IPage<LoginPageViewModel>>();
+        //_navigation.DisplayPage<IPage<LoginPageViewModel>>();
     }
 }

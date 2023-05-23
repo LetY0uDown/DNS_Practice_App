@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DNS_Practice_App.Models;
+﻿namespace Database.Models;
 
 public partial class City
 {

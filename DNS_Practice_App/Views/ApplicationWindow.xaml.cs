@@ -13,10 +13,4 @@ public partial class ApplicationWindow : Window
 
         InitializeComponent();
     }
-
-    private void Frame_ContentRendered (object sender, System.EventArgs e)
-    {
-        if (App.FirstConnection is not null)
-            navigationPanel.Visibility = Visibility.Visible;
-    }
 }

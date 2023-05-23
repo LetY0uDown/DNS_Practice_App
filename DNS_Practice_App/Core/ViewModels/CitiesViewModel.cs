@@ -1,5 +1,6 @@
-﻿using DNS_Practice_App.Abstracts;
-using DNS_Practice_App.Models;
+﻿using Database;
+using Database.Models;
+using DNS_Practice_App.Abstracts;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,8 +8,7 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class CitiesViewModel : ViewModel
 {
-    private IEnumerable<City> _cities1Orig;
-    private IEnumerable<City> _cities2Orig;
+    private List<IEnumerable<City>> _citiesOrig;
 
     private readonly IRepository<City> _repository;
     private string _searchString;
@@ -34,29 +34,26 @@ public sealed class CitiesViewModel : ViewModel
 
     public UICommand UpdateList { get; private init; }
 
-    public List<City> Cities_1 { get; set; }
-    public List<City> Cities_2 { get; set; }
-
-    public string FirstDB => App.FirstConnection.Database;
-    public string SecondDB => App.SecondConnection.Database;
+    public List<IEnumerable<City>> Cities { get; set; }
 
     public override void Initialize ()
     {
-        _cities1Orig = _repository.GetFromFirstDB();
-        _cities2Orig = _repository.GetFromSecondDB();
-
-        Cities_1 = _cities1Orig.ToList();
-        Cities_2 = _cities2Orig.ToList();
+        _citiesOrig = _repository.GetData().ToList();
+        Cities = _citiesOrig;
     }
 
     private void Search ()
     {
-        if (string.IsNullOrEmpty(SearchText)) {
-            Cities_1 = _cities1Orig.ToList();
-            Cities_2 = _cities2Orig.ToList();
-        } else {
-            Cities_1 = _repository.SearchFrom(_cities1Orig, SearchText).ToList();
-            Cities_2 = _repository.SearchFrom(_cities2Orig, SearchText).ToList();
+        if (string.IsNullOrEmpty(SearchText))
+        {
+            Cities = _citiesOrig.ToList();
+        }
+        else
+        {
+            for (int i = 0; i < Cities.Count; i++)
+            {
+                Cities[i] = _repository.FilterList(_citiesOrig[i], SearchText);
+            }
         }
 
         UpdateUI();
@@ -64,7 +61,6 @@ public sealed class CitiesViewModel : ViewModel
 
     private void UpdateUI ()
     {
-        OnPropertyChanged(nameof(Cities_1));
-        OnPropertyChanged(nameof(Cities_2));
+        OnPropertyChanged(nameof(Cities));
     }
 }
