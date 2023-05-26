@@ -1,12 +1,12 @@
 ﻿namespace Database.Models;
 
-public partial class ProductReserve
+public class ProductReserve
 {
     public Guid DocumentId { get; set; }
     public int DocumentType { get; set; }
     public Guid ProductId { get; set; }
     public int ProductCount { get; set; }
 
-    public virtual Document Document { get; set; } = null!;
-    public virtual Product Product { get; set; } = null!;
+    public Document Document { get; set; } = null!;
+    public Product Product { get; set; } = null!;
 }

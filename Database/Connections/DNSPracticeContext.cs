@@ -2,44 +2,17 @@
 
 namespace Database.Models;
 
-public record class DBConnectionData (string Server, string User, string Password, string Database)
+public abstract class DNSPracticeContext : DbContext
 {
-    public string ConnectionString => $"server={Server};user={User};password={Password};database={Database}";
-
-    public bool IsNotEmpty => !string.IsNullOrWhiteSpace(Server) &&
-                              !string.IsNullOrWhiteSpace(User) &&
-                              !string.IsNullOrWhiteSpace(Password) &&
-                              !string.IsNullOrWhiteSpace(Database);
-}
-
-public class DNS_practiceContext : DbContext
-{
-    private readonly string _connectionString;
-
-    public DNS_practiceContext(string connectionString)
-    {
-        _connectionString = connectionString;
-    }
-
-    public virtual DbSet<City> Cities { get; set; } = null!;
-    public virtual DbSet<Document> Documents { get; set; } = null!;
-    public virtual DbSet<Product> Products { get; set; } = null!;
-    public virtual DbSet<ProductReserve> ProductReserves { get; set; } = null!;
-    public virtual DbSet<ProductStorage> ProductStorages { get; set; } = null!;
-    public virtual DbSet<Storage> Storages { get; set; } = null!;
-
-    protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured) {
-            optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString));
-        }
-    }
+    public DbSet<City> Cities { get; set; } = null!;
+    public DbSet<Document> Documents { get; set; } = null!;
+    public DbSet<Product> Products { get; set; } = null!;
+    public DbSet<ProductReserve> ProductReserves { get; set; } = null!;
+    public DbSet<ProductStorage> ProductStorages { get; set; } = null!;
+    public DbSet<Storage> Storages { get; set; } = null!;
 
     protected override void OnModelCreating (ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("utf8mb4_0900_ai_ci")
-            .HasCharSet("utf8mb4");
-
         modelBuilder.Entity<City>(entity => {
             entity.ToTable("city");
 

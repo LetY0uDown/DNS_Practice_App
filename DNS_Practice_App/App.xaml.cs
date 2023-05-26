@@ -1,14 +1,10 @@
-﻿using Database;
-using Database.Models;
-using DNS_Practice_App.Abstracts;
+﻿using DNS_Practice_App.Abstracts;
 using DNS_Practice_App.Core;
 using DNS_Practice_App.Core.Extensions;
 using DNS_Practice_App.Views;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
 using System.Windows;
 
 namespace DNS_Practice_App;
@@ -42,17 +38,10 @@ public partial class App : Application
 
         var config = builder.Build();
 
-        var connectionStrings = config.GetSection("ConnectionStrings").GetChildren().Select(s => s.Value);
-        var c = connectionStrings.Count();
-
         var hostBuilder = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder().ConfigureServices(services => {
             services.AddSingleton(typeof(IConfiguration), config);
             services.AddSingleton<INavigation, Navigation>();
             services.AddSingleton<ApplicationWindow>();
-
-            foreach (var connection in connectionStrings) {
-                services.AddSingleton(typeof(DNS_practiceContext), new DNS_practiceContext(connection));
-            }
 
             services.AddRepositorties();
             services.AddViewModels();
