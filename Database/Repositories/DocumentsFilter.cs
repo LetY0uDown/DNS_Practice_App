@@ -2,9 +2,9 @@
 
 namespace Database.Repositories;
 
-public class StorageRepository : IRepository<Storage>
+public class DocumentsFilter : IFilter<Document>
 {
-    public IEnumerable<Storage> FilterList (IEnumerable<Storage> source, string query)
+    public IEnumerable<Document> FilterList (IEnumerable<Document> source, string query)
     {
         return source.Where(e => e.Name.ToLower().Contains(query.ToLower()));
     }

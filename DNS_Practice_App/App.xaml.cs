@@ -1,4 +1,5 @@
-﻿using DNS_Practice_App.Abstracts;
+﻿using Database.Connections;
+using DNS_Practice_App.Abstracts;
 using DNS_Practice_App.Core;
 using DNS_Practice_App.Core.Extensions;
 using DNS_Practice_App.Views;
@@ -43,7 +44,10 @@ public partial class App : Application
             services.AddSingleton<INavigation, Navigation>();
             services.AddSingleton<ApplicationWindow>();
 
-            services.AddRepositorties();
+            services.AddSingleton(typeof(MySqlContext), new MySqlContext(config["ConnectionStrings:MySql"]));
+            services.AddSingleton<MySqlDatabase>();
+
+            services.AddFilters();
             services.AddViewModels();
             services.AddPages();
         });

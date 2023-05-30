@@ -1,4 +1,5 @@
 ﻿using Database;
+using Database.Connections;
 using Database.Models;
 using DNS_Practice_App.Abstracts;
 using System.Collections.Generic;
@@ -8,14 +9,15 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class StoragesViewModel : ViewModel
 {
-    private List<IEnumerable<Storage>> _storagesOrig;
-    private readonly IRepository<Storage> _repository;
+    private List<Storage> _storagesOrig;
+    private readonly IFilter<Storage> _filter;
+    private readonly MySqlDatabase _mySqlDatabase;
     private string _searchString;
 
-    public StoragesViewModel (IRepository<Storage> repository)
+    public StoragesViewModel (IFilter<Storage> filter, MySqlDatabase mySqlDatabase)
     {
-        _repository = repository;
-
+        _filter = filter;
+        _mySqlDatabase = mySqlDatabase;
         UpdateList = new(o => {
             Initialize();
             UpdateUI();
@@ -33,11 +35,11 @@ public sealed class StoragesViewModel : ViewModel
 
     public UICommand UpdateList { get; private init; }
 
-    public List<IEnumerable<Storage>> Storages { get; set; }
+    public List<Storage> Storages { get; set; }
 
     public override void Initialize ()
     {
-        _storagesOrig = _repository.GetData().ToList();
+        _storagesOrig = _mySqlDatabase.Get<Storage>().ToList();
         Storages = _storagesOrig;
     }
 
@@ -49,9 +51,7 @@ public sealed class StoragesViewModel : ViewModel
             return;
         }
 
-        for (int i = 0; i < Storages.Count; i++) {
-            Storages[i] = _repository.FilterList(_storagesOrig[i], SearchText);
-        }
+        Storages = _filter.FilterList(_storagesOrig, SearchText).ToList();
 
         UpdateUI();
     }

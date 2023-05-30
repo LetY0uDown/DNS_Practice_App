@@ -10,14 +10,14 @@ namespace DNS_Practice_App.Core.Extensions;
 
 internal static class ServiceCollectionExtensions
 {
-    internal static void AddRepositorties (this IServiceCollection services)
+    internal static void AddFilters (this IServiceCollection services)
     {
-        services.AddSingleton<IRepository<Product>, ProductsRepository>();
-        services.AddSingleton<IRepository<Storage>, StorageRepository>();
-        services.AddSingleton<IRepository<ProductReserve>, ProductReservesRepository>();
-        services.AddSingleton<IRepository<ProductStorage>, ProductStorageRepository>();
-        services.AddSingleton<IRepository<City>, CitiesRepository>();
-        services.AddSingleton<IRepository<Document>, DocumentsRepository>();
+        services.AddSingleton<IFilter<Product>, ProductsFilter>();
+        services.AddSingleton<IFilter<Storage>, StorageFilter>();
+        services.AddSingleton<IFilter<ProductReserve>, ProductReservesFilter>();
+        services.AddSingleton<IFilter<ProductStorage>, ProductStorageFilter>();
+        services.AddSingleton<IFilter<City>, CitiesFilter>();
+        services.AddSingleton<IFilter<Document>, DocumentsFilter>();
     }
 
     internal static void AddPages (this IServiceCollection services)

@@ -1,9 +1,8 @@
 ﻿using Database.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Database.Repositories;
 
-public class ProductReservesRepository : IRepository<ProductReserve>
+public class ProductReservesFilter : IFilter<ProductReserve>
 {
     public IEnumerable<ProductReserve> FilterList (IEnumerable<ProductReserve> source, string query)
     {

@@ -2,7 +2,7 @@
 
 namespace Database.Repositories;
 
-public class ProductsRepository : IRepository<Product>
+public class ProductsFilter : IFilter<Product>
 {
     public IEnumerable<Product> FilterList (IEnumerable<Product> source, string query)
     {

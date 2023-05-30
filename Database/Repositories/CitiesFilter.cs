@@ -2,7 +2,7 @@
 
 namespace Database.Repositories;
 
-public class CitiesRepository : IRepository<City>
+public class CitiesFilter : IFilter<City>
 {
     public IEnumerable<City> FilterList (IEnumerable<City> source, string query)
     {

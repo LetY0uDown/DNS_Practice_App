@@ -1,4 +1,5 @@
 ﻿using Database;
+using Database.Connections;
 using Database.Models;
 using DNS_Practice_App.Abstracts;
 using System.Collections.Generic;
@@ -8,15 +9,16 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class CitiesViewModel : ViewModel
 {
-    private List<IEnumerable<City>> _citiesOrig;
+    private List<City> _citiesOrig;
 
-    private readonly IRepository<City> _repository;
+    private readonly IFilter<City> _filter;
+    private readonly MySqlDatabase _mySqlDatabase;
     private string _searchString;
 
-    public CitiesViewModel (IRepository<City> repository)
+    public CitiesViewModel (IFilter<City> filter, MySqlDatabase mySqlDatabase)
     {
-        _repository = repository;
-
+        _filter = filter;
+        _mySqlDatabase = mySqlDatabase;
         UpdateList = new(o => {
             Initialize();
             UpdateUI();
@@ -34,11 +36,11 @@ public sealed class CitiesViewModel : ViewModel
 
     public UICommand UpdateList { get; private init; }
 
-    public List<IEnumerable<City>> Cities { get; set; }
+    public List<City> Cities { get; set; }
 
     public override void Initialize ()
     {
-        _citiesOrig = _repository.GetData().ToList();
+        _citiesOrig = _mySqlDatabase.Get<City>().ToList();
         Cities = _citiesOrig;
     }
 
@@ -50,10 +52,7 @@ public sealed class CitiesViewModel : ViewModel
         }
         else
         {
-            for (int i = 0; i < Cities.Count; i++)
-            {
-                Cities[i] = _repository.FilterList(_citiesOrig[i], SearchText);
-            }
+            Cities = _filter.FilterList(_citiesOrig, SearchText).ToList();
         }
 
         UpdateUI();

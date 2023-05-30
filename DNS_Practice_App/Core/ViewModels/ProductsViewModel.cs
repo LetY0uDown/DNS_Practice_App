@@ -1,4 +1,5 @@
 ﻿using Database;
+using Database.Connections;
 using Database.Models;
 using DNS_Practice_App.Abstracts;
 using System.Collections.Generic;
@@ -8,15 +9,16 @@ namespace DNS_Practice_App.Core.ViewModels;
 
 public sealed class ProductsViewModel : ViewModel
 {
-    private List<IEnumerable<Product>> _prodsOrig;
+    private List<Product> _prodsOrig;
 
-    private readonly IRepository<Product> _repository;
+    private readonly IFilter<Product> _filter;
+    private readonly MySqlDatabase _mySqlDatabase;
     private string _searchString;
 
-    public ProductsViewModel (IRepository<Product> repository)
+    public ProductsViewModel (IFilter<Product> filter, MySqlDatabase mySqlDatabase)
     {
-        _repository = repository;
-
+        _filter = filter;
+        _mySqlDatabase = mySqlDatabase;
         UpdateList = new(o => {
             Initialize();
             UpdateUI();
@@ -28,17 +30,17 @@ public sealed class ProductsViewModel : ViewModel
         get => _searchString;
         set {
             _searchString = value;
-            Search();           
+            Search();
         }
     }
 
     public UICommand UpdateList { get; private init; }
 
-    public List<IEnumerable<Product>> Products { get; set; }
+    public List<Product> Products { get; set; }
 
     public override void Initialize ()
     {
-        _prodsOrig = _repository.GetData().ToList();
+        _prodsOrig = _mySqlDatabase.Get<Product>().ToList();
         Products = _prodsOrig.ToList();
     }
 
@@ -47,9 +49,7 @@ public sealed class ProductsViewModel : ViewModel
         if (string.IsNullOrEmpty(SearchText)) {
             Products = _prodsOrig.ToList();
         } else {
-            for (int i = 0; i < _prodsOrig.Count; i++) {
-                Products[i] = _repository.FilterList(_prodsOrig[i], SearchText);
-            }
+            Products = _filter.FilterList(_prodsOrig, SearchText).ToList();
         }
 
         UpdateUI();
