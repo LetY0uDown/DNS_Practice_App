@@ -12,10 +12,10 @@ public sealed class ProductsViewModel : ViewModel
     private List<Product> _prodsOrig;
 
     private readonly IFilter<Product> _filter;
-    private readonly MySqlDatabase _mySqlDatabase;
+    private readonly IMySqlDatabase _mySqlDatabase;
     private string _searchString;
 
-    public ProductsViewModel (IFilter<Product> filter, MySqlDatabase mySqlDatabase)
+    public ProductsViewModel (IFilter<Product> filter, IMySqlDatabase mySqlDatabase)
     {
         _filter = filter;
         _mySqlDatabase = mySqlDatabase;

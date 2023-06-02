@@ -46,6 +46,6 @@ internal static class ServiceCollectionExtensions
     internal static void AddDatabases (this IServiceCollection services, IConfiguration config)
     {
         services.AddSingleton(typeof(MySqlContext), new MySqlContext(config["ConnectionStrings:MySql"]));
-        services.AddSingleton<MySqlDatabase>();
+        services.AddSingleton<IMySqlDatabase, MySqlDatabase>();
     }
 }

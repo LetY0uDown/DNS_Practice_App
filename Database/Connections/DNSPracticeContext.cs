@@ -105,18 +105,6 @@ public abstract class DNSPracticeContext : DbContext
                 .HasColumnName("ProductID")
                 .HasDefaultValueSql("''");
 
-            entity.HasOne(d => d.Document)
-                .WithMany()
-                .HasForeignKey(d => d.DocumentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_product_storage_documentID");
-
-            entity.HasOne(d => d.Product)
-                .WithMany()
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_product_storage_ProductID2");
-
             modelBuilder.Entity<Storage>(entity => {
                 entity.ToTable("storages");
 
@@ -134,12 +122,6 @@ public abstract class DNSPracticeContext : DbContext
                     .HasMaxLength(50)
                     .HasColumnName("name")
                     .HasDefaultValueSql("''");
-
-                entity.HasOne(d => d.City)
-                    .WithMany(p => p.Storages)
-                    .HasForeignKey(d => d.CityId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_storages_cityID");
             });
         });
     }

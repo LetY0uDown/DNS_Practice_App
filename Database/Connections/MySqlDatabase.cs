@@ -3,7 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Database.Connections;
 
-public class MySqlDatabase : IDatabase
+public interface IMySqlDatabase
+{
+    IEnumerable<T> Get<T> () where T : class;
+}
+
+public class MySqlDatabase : IMySqlDatabase
 {
     private readonly MySqlContext _context;
 

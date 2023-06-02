@@ -12,10 +12,10 @@ public sealed class CitiesViewModel : ViewModel
     private List<City> _citiesOrig;
 
     private readonly IFilter<City> _filter;
-    private readonly MySqlDatabase _mySqlDatabase;
+    private readonly IMySqlDatabase _mySqlDatabase;
     private string _searchString;
 
-    public CitiesViewModel (IFilter<City> filter, MySqlDatabase mySqlDatabase)
+    public CitiesViewModel (IFilter<City> filter, IMySqlDatabase mySqlDatabase)
     {
         _filter = filter;
         _mySqlDatabase = mySqlDatabase;

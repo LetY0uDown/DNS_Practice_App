@@ -12,10 +12,10 @@ public sealed class DocumentsViewModel : ViewModel
     private List<Document> _docsOrig;
 
     private readonly IFilter<Document> _filter;
-    private readonly MySqlDatabase _mySqlDatabase;
+    private readonly IMySqlDatabase _mySqlDatabase;
     private string _searchString;
 
-    public DocumentsViewModel (IFilter<Document> filter, MySqlDatabase mySqlDatabase)
+    public DocumentsViewModel (IFilter<Document> filter, IMySqlDatabase mySqlDatabase)
     {
         _filter = filter;
         _mySqlDatabase = mySqlDatabase;

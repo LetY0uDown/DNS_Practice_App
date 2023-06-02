@@ -11,10 +11,10 @@ public sealed class StoragesViewModel : ViewModel
 {
     private List<Storage> _storagesOrig;
     private readonly IFilter<Storage> _filter;
-    private readonly MySqlDatabase _mySqlDatabase;
+    private readonly IMySqlDatabase _mySqlDatabase;
     private string _searchString;
 
-    public StoragesViewModel (IFilter<Storage> filter, MySqlDatabase mySqlDatabase)
+    public StoragesViewModel (IFilter<Storage> filter, IMySqlDatabase mySqlDatabase)
     {
         _filter = filter;
         _mySqlDatabase = mySqlDatabase;
