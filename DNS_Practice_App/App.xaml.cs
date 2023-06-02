@@ -44,9 +44,7 @@ public partial class App : Application
             services.AddSingleton<INavigation, Navigation>();
             services.AddSingleton<ApplicationWindow>();
 
-            services.AddSingleton(typeof(MySqlContext), new MySqlContext(config["ConnectionStrings:MySql"]));
-            services.AddSingleton<MySqlDatabase>();
-
+            services.AddDatabases(config);
             services.AddFilters();
             services.AddViewModels();
             services.AddPages();

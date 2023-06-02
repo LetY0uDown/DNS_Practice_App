@@ -1,9 +1,11 @@
 ﻿using Database;
+using Database.Connections;
 using Database.Models;
 using Database.Repositories;
 using DNS_Practice_App.Abstracts;
 using DNS_Practice_App.Core.ViewModels;
 using DNS_Practice_App.Views.Pages;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DNS_Practice_App.Core.Extensions;
@@ -39,5 +41,11 @@ internal static class ServiceCollectionExtensions
         services.AddSingleton<ProductsStorageViewModel>();
         services.AddSingleton<ProductsViewModel>();
         services.AddSingleton<StoragesViewModel>();
+    }
+
+    internal static void AddDatabases (this IServiceCollection services, IConfiguration config)
+    {
+        services.AddSingleton(typeof(MySqlContext), new MySqlContext(config["ConnectionStrings:MySql"]));
+        services.AddSingleton<MySqlDatabase>();
     }
 }
